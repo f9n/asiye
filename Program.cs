@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
@@ -45,6 +46,8 @@ namespace asiye {
 
             PrintChannelLinks(channels);
 
+            WriteTextFile(channels, "out.txt");
+
             Console.ReadKey();
             driver.Close();
 
@@ -81,6 +84,25 @@ namespace asiye {
             foreach(var link in ChannelLinks) {
                 Console.WriteLine(link);
             }
+        }
+        static void WriteTextFile(List<string> ChannelLinks, string filename) {
+            using (StreamWriter sw = new StreamWriter(filename)) {
+
+                foreach (string link in ChannelLinks) {
+                    sw.WriteLine(link);
+                }
+            }
+        }
+
+        static List<string> ReadTextFile(string filename) {
+            List<string> ChannelLinks = new List<string>();
+            string line = "";
+            using (StreamReader sr = new StreamReader(filename)) {
+                while ((line = sr.ReadLine()) != null) {
+                    ChannelLinks.Add(line);
+                }
+            }
+            return ChannelLinks;
         }
     }
 }
