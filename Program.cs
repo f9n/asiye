@@ -7,6 +7,34 @@ using OpenQA.Selenium.Chrome;
 namespace asiye {
     class Program {
         static void Main(string[] args) {
+            if (args.Length == 0) {
+                Console.WriteLine("Please enter argument");
+                Console.WriteLine("Usage: asiye [--export|--import|--help]");
+                return;
+            }
+            switch (args[0]) {
+                case "-h":
+                case "help":
+                case "--help":
+                    Console.WriteLine("Help");
+                    break;
+                case "-e":
+                case "export":
+                case "--export":
+                    Export();
+                    break;
+                case "-i":
+                case "import":
+                case "--import":
+                    Console.WriteLine("Not finished!");
+                    break;
+                default:
+                    Console.WriteLine("Invalid argument!");
+                    break;
+            }
+        }
+
+        static void Export() {
             Console.WriteLine("Hello Universe");
 
             IWebDriver driver = new ChromeDriver();
@@ -22,7 +50,6 @@ namespace asiye {
 
             Console.WriteLine("Okey!");
         }
-
         static void LoginYoutube(IWebDriver driver) {
             string message = "Please Login to Youtube, then press any key on console.";
 

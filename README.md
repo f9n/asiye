@@ -7,5 +7,5 @@ Import export YouTube subscriptions with selenium
 ```bash
   $ git clone https://github.com/pleycpl/asiye
   $ cd asiye
-  $ dotnet run
-```  
+  $ dotnet run help
+```
