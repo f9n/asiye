@@ -29,11 +29,17 @@ namespace asiye {
                 case "import":
                 case "--import":
                     Console.WriteLine("Not finished!");
+                    Import("out.json");
                     break;
                 default:
                     Console.WriteLine("Invalid argument!");
                     break;
             }
+        }
+
+        static void Import(string filename) {
+            List<Channel> Channels = ReadJsonFile(filename);
+            PrintChannels(Channels);
         }
 
         static void Export() {
@@ -78,8 +84,7 @@ namespace asiye {
             IWebElement tempElement;
             foreach(IWebElement item in driver.FindElements(By.XPath($"//a[contains(@class, '{classnames}')]"))) {
                 url = item.GetAttribute("href");
-                tempElement = item.FindElement(By.TagName("h3")).FindElement(By.TagName("span"));
-                name = tempElement.Text;
+                name = item.FindElement(By.TagName("h3")).FindElement(By.TagName("span")).Text;
                 Channel tempChannel = new Channel(name, url);
                 channels.Add(tempChannel);
             }
@@ -108,24 +113,29 @@ namespace asiye {
             return channels;
         }
 
-        static void WriteTextFile(List<string> ChannelLinks, string filename) {
+        static void WriteTextFile(List<Channel> channels, string filename) {
             using (StreamWriter sw = new StreamWriter(filename)) {
 
-                foreach (string link in ChannelLinks) {
-                    sw.WriteLine(link);
+                foreach (Channel channel in channels) {
+                    sw.WriteLine($"{channel.name}|{channel.url}");
                 }
             }
         }
 
-        static List<string> ReadTextFile(string filename) {
-            List<string> ChannelLinks = new List<string>();
+        static List<Channel> ReadTextFile(string filename) {
+            List<Channel> channels = new List<Channel>();
+            char[] pipeSeparator = new char[] { '|' };
+            string[] result;
+
             string line = "";
             using (StreamReader sr = new StreamReader(filename)) {
                 while ((line = sr.ReadLine()) != null) {
-                    ChannelLinks.Add(line);
+                    result = line.Split(pipeSeparator, StringSplitOptions.None);
+                    Channel tempChannel = new Channel(result[0], result[1]);
+                    channels.Add(tempChannel);
                 }
             }
-            return ChannelLinks;
+            return channels;
         }
     }
 
