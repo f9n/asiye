@@ -42,11 +42,11 @@ namespace asiye {
 
             LoginYoutube(driver);
 
-            List<string> channels = GetChannelLinks(driver);
+            List<Channel> Channels = GetChannels(driver);
 
-            PrintChannelLinks(channels);
+            PrintChannels(Channels);
 
-            WriteTextFile(channels, "out.txt");
+            //WriteTextFile(channels, "out.txt");
 
             Console.ReadKey();
             driver.Close();
@@ -65,24 +65,29 @@ namespace asiye {
             Console.ReadKey();
         }
 
-        static List<string> GetChannelLinks(IWebDriver driver) {
+        static List<Channel> GetChannels(IWebDriver driver) {
             string channels_url = "https://www.youtube.com/feed/channels";
             string classnames = "yt-simple-endpoint style-scope ytd-channel-renderer";
-            List<string> ChannelLinks = new List<string>();
+            List<Channel> channels = new List<Channel>();
 
             driver.Navigate().GoToUrl(channels_url);
-            string temp;
-            foreach(var item in driver.FindElements(By.XPath($"//a[contains(@class, '{classnames}')]"))) {
-                temp = item.GetAttribute("href");
-                ChannelLinks.Add(temp);
+
+            string url, name;
+            IWebElement tempElement;
+            foreach(IWebElement item in driver.FindElements(By.XPath($"//a[contains(@class, '{classnames}')]"))) {
+                url = item.GetAttribute("href");
+                tempElement = item.FindElement(By.TagName("h3")).FindElement(By.TagName("span"));
+                name = tempElement.Text;
+                Channel tempChannel = new Channel(name, url);
+                channels.Add(tempChannel);
             }
-            Console.WriteLine(ChannelLinks.Count);
-            return ChannelLinks;
+            Console.WriteLine(channels.Count);
+            return channels;
         }
 
-        static void PrintChannelLinks(List<string> ChannelLinks) {
-            foreach(var link in ChannelLinks) {
-                Console.WriteLine(link);
+        static void PrintChannels(List<Channel> channels) {
+            foreach(Channel channel in channels) {
+                Console.WriteLine($"{channel.name} {channel.url}");
             }
         }
         static void WriteTextFile(List<string> ChannelLinks, string filename) {
@@ -103,6 +108,15 @@ namespace asiye {
                 }
             }
             return ChannelLinks;
+        }
+    }
+
+    class Channel {
+        public string name { get; set; }
+        public string url { get; set; }
+        public Channel(string name, string url) {
+            this.name = name;
+            this.url = url;
         }
     }
 }
