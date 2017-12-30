@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
     <PackageReference Include="Selenium.Support" Version="3.8.0" />
     <PackageReference Include="Selenium.Webdriver" Version="3.8.0" />
     <PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="2.34.0" />
