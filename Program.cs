@@ -4,6 +4,7 @@ using System.IO;
 
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+using Newtonsoft.Json;
 
 namespace asiye {
     class Program {
@@ -47,6 +48,7 @@ namespace asiye {
             PrintChannels(Channels);
 
             //WriteTextFile(channels, "out.txt");
+            WriteJsonFile(Channels, "out.json");
 
             Console.ReadKey();
             driver.Close();
@@ -90,6 +92,22 @@ namespace asiye {
                 Console.WriteLine($"{channel.name} {channel.url}");
             }
         }
+
+        static void WriteJsonFile(List<Channel> channels, string filename) {
+            string output = JsonConvert.SerializeObject(channels, Formatting.Indented);  
+            Console.WriteLine(output);
+            System.IO.File.WriteAllText(filename, output);
+        }
+
+        static List<Channel> ReadJsonFile(string filename) {
+            List<Channel> channels;
+            using (StreamReader r = new StreamReader(filename)) {
+                string json = r.ReadToEnd();
+                channels = JsonConvert.DeserializeObject<List<Channel>>(json);
+            }
+            return channels;
+        }
+
         static void WriteTextFile(List<string> ChannelLinks, string filename) {
             using (StreamWriter sw = new StreamWriter(filename)) {
 
