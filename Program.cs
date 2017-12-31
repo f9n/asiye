@@ -29,7 +29,7 @@ namespace asiye {
                 case "import":
                 case "--import":
                     Console.WriteLine("Not finished!");
-                    Import("out.json");
+                    Import("example.json");
                     break;
                 default:
                     Console.WriteLine("Invalid argument!");
@@ -39,9 +39,27 @@ namespace asiye {
 
         static void Import(string filename) {
             List<Channel> Channels = ReadJsonFile(filename);
-            PrintChannels(Channels);
+
+            IWebDriver driver = new ChromeDriver();
+
+            LoginYoutube(driver);
+
+            foreach (Channel channel in Channels) {
+                Subscribe(driver, channel);
+            }
+
+            Console.ReadKey();
+            driver.Close();
         }
 
+        static void Subscribe(IWebDriver driver, Channel channel) {
+            driver.Navigate().GoToUrl(channel.url);
+            Console.WriteLine($"Started! {channel.name}");
+
+            driver.FindElement(By.Id("subscribe-button")).Click();
+
+            Console.WriteLine("Finished!");
+        }
         static void Export() {
             Console.WriteLine("Hello Universe");
 
@@ -81,7 +99,6 @@ namespace asiye {
             driver.Navigate().GoToUrl(channels_url);
 
             string url, name;
-            IWebElement tempElement;
             foreach(IWebElement item in driver.FindElements(By.XPath($"//a[contains(@class, '{classnames}')]"))) {
                 url = item.GetAttribute("href");
                 name = item.FindElement(By.TagName("h3")).FindElement(By.TagName("span")).Text;
