@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 namespace asiye {
     class Program {
         static void Main(string[] args) {
+            string filename = "out.json";
             if (args.Length == 0) {
                 Console.WriteLine("Please enter argument");
                 Console.WriteLine("Usage: asiye [--export|--import|--help]");
@@ -23,13 +24,22 @@ namespace asiye {
                 case "-e":
                 case "export":
                 case "--export":
-                    Export();
+                    if(args.Length == 2) {
+                        filename = args[1];
+                    }
+                    Export(filename);
                     break;
                 case "-i":
                 case "import":
                 case "--import":
-                    Console.WriteLine("Not finished!");
-                    Import("example.json");
+                    if(args.Length == 2) {
+                        filename = args[1];
+                    } else {
+                        Console.WriteLine("Please enter argument like this,");
+                        Console.WriteLine("asiye --import subscription-list.json");
+                        return;
+                    }
+                    Import(filename);
                     break;
                 default:
                     Console.WriteLine("Invalid argument!");
@@ -60,7 +70,7 @@ namespace asiye {
 
             Console.WriteLine("Finished!");
         }
-        static void Export() {
+        static void Export(string filename) {
             Console.WriteLine("Hello Universe");
 
             IWebDriver driver = new ChromeDriver();
@@ -72,7 +82,7 @@ namespace asiye {
             PrintChannels(Channels);
 
             //WriteTextFile(channels, "out.txt");
-            WriteJsonFile(Channels, "out.json");
+            WriteJsonFile(Channels, filename);
 
             Console.ReadKey();
             driver.Close();
