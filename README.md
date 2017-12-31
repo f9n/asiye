@@ -1,11 +1,16 @@
 # asiye
 Import export YouTube subscriptions with selenium
 
-## Install und Run
-  First, you should install [dotnet-core](https://www.microsoft.com/net/learn/get-started/linuxredhat), then open console.
+## Install for Linux or MacOs
 
 ```bash
-  $ git clone https://github.com/pleycpl/asiye
-  $ cd asiye
-  $ dotnet run help
+$ sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/pleycpl/asiye/master/scripts/install.sh)"
+```
+
+## Run
+
+```bash
+$ asiye --help
+$ asiye --export
+$ asiye --import subscription-list.json
 ```
