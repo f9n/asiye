@@ -66,7 +66,14 @@ namespace asiye {
             driver.Navigate().GoToUrl(channel.url);
             Console.WriteLine($"Started! {channel.name}");
 
-            driver.FindElement(By.Id("subscribe-button")).Click();
+            IWebElement notification_button = driver.FindElement(By.Id("notification-button"));
+            var hidden_value = notification_button.GetAttribute("hidden");
+
+            //Console.WriteLine($"Hidden Value: {hidden_value}");
+            if (hidden_value == "true") {
+                driver.FindElement(By.Id("subscribe-button")).Click();
+                Console.WriteLine("Subscribed!");
+            }
 
             Console.WriteLine("Finished!");
         }
