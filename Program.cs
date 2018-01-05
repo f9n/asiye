@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
+
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
-using Newtonsoft.Json;
+
 using asiye.Models;
 using asiye.Utilities;
 
